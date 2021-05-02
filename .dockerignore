@@ -1,0 +1,11 @@
+.dockerignore
+.git
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+.env
+.env38
+docker-compose.yml
+Makefile
