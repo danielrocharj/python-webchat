@@ -9,7 +9,8 @@ def test_users_get_returns_status_200(client_app):
 
 
 def test_users_get_returns_users_list(client_app):
-    response = client_app.get("/users")
+    query_params = {"skip": 0, "limit": 10}
+    response = client_app.get("/users", params=query_params)
     result = response.json()
     assert len(result) <= 10
 

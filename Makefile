@@ -10,4 +10,4 @@ down-local:
 	docker-compose -f docker-compose.yml down --remove-orphans
 
 access:
-	docker exec -it some-webchat /bin/bash
+	docker exec -it some-webchat /bin/sh

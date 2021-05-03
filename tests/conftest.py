@@ -5,7 +5,7 @@ from app.config import settings
 
 settings.ENVIRONMENT = "test"
 
-from app.database import SessionLocal, engine  # noqa: E402
+from app.database.core import SessionLocal, engine  # noqa: E402
 from app.main import app  # noqa: E402
 from app.models import user  # noqa: E402
 

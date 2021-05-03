@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
 
@@ -10,9 +10,13 @@ router = APIRouter()
 
 
 @router.get("/", response_model=List[User])
-async def list_all_users(db: Session = Depends(dependencies.get_db)):
+async def list_all_users(
+    skip: Optional[int] = None,
+    limit: Optional[int] = None,
+    db: Session = Depends(dependencies.get_db),
+):
     """Return all users"""
-    users = crud.get_users(db, 0, 10)
+    users = crud.get_users(db, skip, limit)
     return users
 
 
@@ -21,11 +25,10 @@ async def create_user(
     user_request: UserCreateRequest, db: Session = Depends(dependencies.get_db)
 ):
     """Create a new user"""
-    user_in_db = crud.get_user_by_email(db, user_request.email)
-    if user_in_db:
-        raise HTTPException(
-            status_code=400, detail="The user with this email already exists."
-        )
+    user_by_email = crud.get_user_by_email(db, user_request.email)
+    user_by_username = crud.get_user_by_username(db, user_request.username)
+    if user_by_email or user_by_username:
+        raise HTTPException(status_code=400, detail="The user already exists.")
     return crud.create_user(db, user_request)
 
 
