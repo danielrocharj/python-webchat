@@ -19,3 +19,14 @@ def user_seeder(db: Session):
     user_in_db = crud.get_user_by_username(db, username=one.username)
     if not user_in_db:
         crud.create_user(db, one)
+
+    two = UserCreateRequest(
+        full_name="Morpheus",
+        email="morpheus@user.com",
+        username="morpheus",
+        password=settings.ADMIN_PASSWORD,
+        admin=True,
+    )
+    user_in_db = crud.get_user_by_username(db, username=two.username)
+    if not user_in_db:
+        crud.create_user(db, two)

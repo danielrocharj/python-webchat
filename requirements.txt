@@ -19,3 +19,5 @@ async-generator==1.10
 python-multipart
 passlib[bcrypt]
 pyjwt
+jinja2
+aiofiles

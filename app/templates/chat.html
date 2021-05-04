@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+
+{% block content %}
+       <h2>Chat</h2>
+
+        <div id="messages" style="overflow-y: scroll; height:300px"></div>
+
+        <form action="" onsubmit="sendMessage(event)">
+            <input type="text" id="messageText" autocomplete="off"/>
+            <button>Send</button>
+        </form>
+
+        <script>
+
+            var getCookie = function (name) {
+                var value = "; " + document.cookie;
+
+                var parts = value.split("; " + name + "=");
+                if (parts.length == 2) return parts.pop().split(";").shift();
+            };
+            const token = getCookie('Authorization');
+
+            var ws = new WebSocket("ws://" + window.location.host + "/ws/chat?token=" + token);
+
+            ws.onmessage = function(event) {
+                var messages = document.getElementById('messages')
+                var message = document.createElement('p')
+                var content = document.createTextNode(event.data)
+                message.appendChild(content);
+                messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;
+            };
+
+            function sendMessage(event) {
+                var input = document.getElementById("messageText")
+                ws.send(input.value)
+                input.value = ''
+                event.preventDefault()
+            }
+        </script>
+{% endblock %}
