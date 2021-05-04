@@ -1,8 +1,9 @@
+from datetime import datetime
 from typing import Any, Dict, Union
 from sqlalchemy.orm import Session
 from app.models.user import User
 from app.schemas.user import UserCreateRequest
-from werkzeug.security import generate_password_hash
+from app.security import generate_hash
 
 
 def get_user_by_id(db: Session, user_id: int):
@@ -26,9 +27,13 @@ def create_user(db: Session, user_to_create: Union[UserCreateRequest, Dict[str, 
         full_name=user_to_create.full_name,
         username=user_to_create.username,
         email=user_to_create.email,
-        password=generate_password_hash(user_to_create.password),
+        password=generate_hash(user_to_create.password),
+        admin=user_to_create.admin,
+        created_at=datetime.now(),
     )
+
     db.add(db_user)
     db.commit()
+    db.expire(db_user)
     db.refresh(db_user)
     return db_user

@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 
 from app.config import settings
 
-if settings.ENVIRONMENT == "test":
+if settings.ENVIRONMENT == "TEST":
     SQLALCHEMY_DATABASE_URL = settings.TEST_DATABASE_URL
 else:
     SQLALCHEMY_DATABASE_URL = settings.DATABASE_URL

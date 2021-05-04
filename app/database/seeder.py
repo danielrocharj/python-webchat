@@ -11,8 +11,8 @@ def user_seeder(db: Session):
     user.Base.metadata.create_all(bind=engine)
     one = UserCreateRequest(
         full_name="Chosen One",
-        username="neo",
         email="one@user.com",
+        username=settings.ADMIN_USERNAME,
         password=settings.ADMIN_PASSWORD,
         admin=True,
     )
