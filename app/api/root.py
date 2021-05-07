@@ -31,7 +31,7 @@ async def login(
     form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
 ):
     user_authenticated = authenticate_user(form_data.username, form_data.password, db)
-    print(form_data.username)
+
     if not user_authenticated:
         raise HTTPException(status_code=401, detail="Invalid credentials")
 
@@ -47,9 +47,15 @@ async def login_page(request: Request):
     return templates.TemplateResponse("login.html", {"request": request})
 
 
-@router.get("/access")
-async def access(token: str = Depends(oauth2_scheme)):
-    return {"the_token": token}
+@router.post("/login/bots")
+async def login_bots(
+    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+):
+    user_authenticated = authenticate_user(form_data.username, form_data.password, db)
+    if not user_authenticated:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
+    return create_jwt_token(user_authenticated.username)
 
 
 @router.get("/")
